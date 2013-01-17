@@ -266,9 +266,9 @@ class BaseNamespace(object):
         specs = inspect.getargspec(method)
         func_args = specs.args
         if not len(func_args) or func_args[0] != 'self':
-            self.error("invalid_method_args",
-                "The server-side method is invalid, as it doesn't "
-                "have 'self' as its first argument")
+            msg = "The server-side method is invalid, as it doesn't "\
+                  "have 'self' as its first argument"
+            self.error("invalid_method_args", msg)
             return
 
         # Check if we need to decorate to handle exceptions

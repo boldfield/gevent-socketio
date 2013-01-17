@@ -363,8 +363,8 @@ class Socket(object):
                 pkt = packet.decode(rawdata, self.json_loads)
             except (ValueError, KeyError, Exception), e:
                 self.error('invalid_packet',
-                    "There was a decoding error when dealing with packet "
-                    "with event: %s... (%s)" % (rawdata[:20], e))
+                           "There was a decoding error when dealing with packet "
+                           "with event: %s... (%s)" % (rawdata[:20], e))
                 continue
 
             if pkt['type'] == 'heartbeat':
@@ -381,15 +381,15 @@ class Socket(object):
 
             if endpoint not in self.namespaces:
                 self.error("no_such_namespace",
-                    "The endpoint you tried to connect to "
-                    "doesn't exist: %s" % endpoint, endpoint=endpoint)
+                           "The endpoint you tried to connect to "
+                           "doesn't exist: %s" % endpoint, endpoint=endpoint)
                 continue
             elif endpoint in self.active_ns:
                 pkt_ns = self.active_ns[endpoint]
             else:
                 new_ns_class = self.namespaces[endpoint]
                 pkt_ns = new_ns_class(self.environ, endpoint,
-                                        request=self.request)
+                                      request=self.request)
                 # This calls initialize() on all the classes and mixins, etc..
                 # in the order of the MRO
                 for cls in type(pkt_ns).__mro__:
@@ -408,7 +408,7 @@ class Socket(object):
                 else:
                     args = [retval]
                 returning_ack = dict(type='ack', ackId=pkt['id'],
-                                     args=retval,
+                                     args=args,
                                      endpoint=pkt.get('endpoint', ''))
                 self.send_packet(returning_ack)
 
@@ -470,7 +470,6 @@ class Socket(object):
                     log.debug("heartbeat timed out, killing socket")
                     self.kill(detach=True)
                 return
-
 
     def _spawn_heartbeat(self):
         """This functions returns a list of jobs"""
